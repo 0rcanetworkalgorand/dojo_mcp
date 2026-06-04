@@ -26,20 +26,14 @@ jobs:
       - name: Validate server syntax
         run: python3 -c "import ast; ast.parse(open('server.py').read()); print('✅ server.py syntax OK')"
 
-      - name: Verify server imports
+      - name: Verify imports resolve
         run: |
           python3 -c "
-          import sys
-          sys.path.insert(0, '.')
-          # Verify the module can be imported without errors
-          import importlib.util
-          spec = importlib.util.spec_from_file_location('server', 'server.py')
-          mod = importlib.util.module_from_spec(spec)
-          # Don't actually execute (would start the server), just verify syntax + imports
-          print('✅ server.py imports resolve')
+          import httpx
+          import fastmcp
+          print('✅ All dependencies available')
           "
 
       - name: Check README exists
         run: |
-          ls README.md
-          echo "✅ Documentation present"
+          test -f README.md && echo '✅ README present'
